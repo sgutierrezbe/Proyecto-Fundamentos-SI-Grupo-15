@@ -29,54 +29,57 @@ const Login = () => {
   });
 
   return (
-    <Paper
-      shadow="xl"
-      radius="xs"
-      p="xl"
-      width={window.innerWidth > 525 ? 525 : "100%"}
-      mt={150}
-      styles={{
-        display: "Flex",
-        "justify-content": "center",
-        "align-items": "center",
+    <Box
+      style={{
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        radius: "xs",
+        p: "xl",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Box>
-        <Title>Welcome back</Title>
-        <Divider label="Login" labelPosition="left" />
-        <Space h="lg" />
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
-          <TextInput
-            withAsterisk
-            label="Email"
-            placeholder="your@email.com"
-            {...form.getInputProps("email")}
-          />
+      <Paper className="pager" shadow="xl" radius="xs" p="xl" m="xl">
+        <Box>
+          <Title>Welcome back</Title>
+          <Divider label="Login" labelPosition="left" />
+          <Space h="lg" />
+          <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <TextInput
+              withAsterisk
+              label="Email"
+              placeholder="your@email.com"
+              {...form.getInputProps("email")}
+            />
 
-          <Space h="sm" />
+            <Space h="sm" />
 
-          <TextInput
-            withAsterisk
-            label="Password"
-            placeholder="yourPassword1234"
-            {...form.getInputProps("password")}
-          />
+            <TextInput
+              withAsterisk
+              label="Password"
+              placeholder="yourPassword1234"
+              {...form.getInputProps("password")}
+            />
 
-          <Checkbox
-            color="red.9"
-            mt="md"
-            label="I agree to sell my privacy"
-            {...form.getInputProps("termsOfService", { type: "checkbox" })}
-          />
+            <Checkbox
+              color="red.9"
+              mt="md"
+              label="I agree to sell my privacy"
+              {...form.getInputProps("termsOfService", { type: "checkbox" })}
+            />
 
-          <Group justify="flex-end" mt="md">
-            <Button type="submit" variant="gradient">
-              Submit
-            </Button>
-          </Group>
-        </form>
-      </Box>
-    </Paper>
+            <Group justify="flex-end" mt="md">
+              <Button type="submit" variant="gradient">
+                Submit
+              </Button>
+            </Group>
+          </form>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 
