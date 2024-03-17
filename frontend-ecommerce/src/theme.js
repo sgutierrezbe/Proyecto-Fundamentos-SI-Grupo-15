@@ -5,6 +5,11 @@ export const theme = createTheme({
   cursorType: "pointer",
   primaryColor: "red",
   autoContrast: true,
+  defaultGradient: {
+    from: "primary.6",
+    to: "primary.9",
+    deg: 20,
+  },
   colors: {
     primary: [
       "#ffe9e9",
@@ -18,5 +23,7 @@ export const theme = createTheme({
       "#c10008",
       "#a90003",
     ],
+    background: ["#f0f"],
+    text: ["#fff"],
   },
 });

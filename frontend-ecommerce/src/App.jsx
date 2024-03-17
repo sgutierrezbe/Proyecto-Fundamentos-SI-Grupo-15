@@ -1,13 +1,12 @@
 import "@mantine/core/styles.css";
-import { MantineProvider, Button, Title } from "@mantine/core";
+import "./App.css";
+import { MantineProvider } from "@mantine/core";
 import { theme } from "./theme";
+import Login from "./Login.jsx";
 
 const App = () => (
-  <MantineProvider theme={theme}>
-    <Title>xd</Title>
-    <Button fullWidth color="red.6">
-      wow
-    </Button>
+  <MantineProvider theme={theme} defaultColorScheme="dark">
+    <Login />
   </MantineProvider>
 );
 export default App;
