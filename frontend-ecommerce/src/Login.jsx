@@ -1,5 +1,6 @@
 import {
   TextInput,
+  PasswordInput,
   Checkbox,
   Button,
   Group,
@@ -60,9 +61,9 @@ const Login = () => {
 
               <Space h="sm" />
 
-              <TextInput
-                withAsterisk
+              <PasswordInput
                 label="Password"
+                withAsterisk
                 placeholder="yourPassword1234"
                 {...form.getInputProps("password")}
               />
