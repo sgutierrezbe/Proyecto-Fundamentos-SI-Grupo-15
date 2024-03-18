@@ -11,7 +11,7 @@ import {
   BackgroundImage,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import "./App.css";
+import "./Login.css";
 import backgroundImage from "./assets/loginBackground.jpg";
 
 const Login = () => {
