@@ -11,7 +11,7 @@ import {
   Paper,
   BackgroundImage,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import "./Login.css";
 import backgroundImage from "./assets/loginBackground.jpg";
 
@@ -24,9 +24,8 @@ const Login = () => {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) =>
-        value ? null : "Invalid password, password cannot be empty",
+      email: isEmail("invalid email"),
+      password: isNotEmpty("invalid password, it cannot be empty"),
       termsOfService: (value) => (value ? false : "Accept or else..."),
     },
   });
