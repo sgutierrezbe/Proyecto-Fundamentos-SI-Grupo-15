@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 20-03-2024 a las 22:01:31
+-- Tiempo de generación: 20-03-2024 a las 23:05:58
 -- Versión del servidor: 8.2.0
 -- Versión de PHP: 8.2.13
 
@@ -57,7 +57,7 @@ INSERT INTO `gpu` (`modelo`, `marca`, `fabricante`, `vram`, `velocidad`, `raytra
 DROP TABLE IF EXISTS `pedido`;
 CREATE TABLE IF NOT EXISTS `pedido` (
   `idpedido` int NOT NULL,
-  `fecha` varchar(45) DEFAULT NULL,
+  `fecha` varchar(45) NOT NULL,
   `USUARIO_idusuario` int NOT NULL,
   PRIMARY KEY (`idpedido`,`USUARIO_idusuario`),
   KEY `fk_PEDIDO_USUARIO1_idx` (`USUARIO_idusuario`)
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `producto`;
 CREATE TABLE IF NOT EXISTS `producto` (
   `idproducto` int NOT NULL,
   `precio` int DEFAULT NULL,
-  `stock` int DEFAULT NULL,
+  `stock` int NOT NULL,
   PRIMARY KEY (`idproducto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -111,9 +111,10 @@ DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idusuario` int NOT NULL,
   `nombre` varchar(45) DEFAULT NULL,
-  `correo` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
-  `rol` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
+  `correo` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `rol` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `direccion` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idusuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -121,9 +122,9 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idusuario`, `nombre`, `correo`, `password`, `rol`) VALUES
-(1, 'admin', 'admin@gmail.com', 'admin123', 'admin'),
-(2, 'user', 'user@gmail.com', 'user123', 'user');
+INSERT INTO `usuario` (`idusuario`, `nombre`, `correo`, `password`, `rol`, `direccion`) VALUES
+(1, 'admin', 'admin@gmail.com', 'admin123', 'admin', NULL),
+(2, 'user', 'user@gmail.com', 'user123', 'user', NULL);
 
 --
 -- Restricciones para tablas volcadas
