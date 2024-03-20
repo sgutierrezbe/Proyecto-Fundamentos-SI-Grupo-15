@@ -1,0 +1,19 @@
+.pagination {
+  width: 62em;
+  margin-inline-start: 30vw;
+}
+
+.container {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.clear-btn {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.save-btn {
+  margin-right: 10px;
+}

@@ -10,6 +10,14 @@ export const theme = createTheme({
     to: "primary.9",
     deg: 20,
   },
+  breakpoints: {
+    s: "26em",
+    xs: "36em",
+    sm: "48em",
+    md: "62em",
+    lg: "75em",
+    xl: "88em",
+  },
   colors: {
     primary: [
       "#ffe9e9",

@@ -1,5 +1,18 @@
-import { AppShell, Burger, Pagination, Text, Title } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Pagination,
+  ThemeIcon,
+  Button,
+  Image,
+  Text,
+  Title,
+  Space,
+  Box,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import "./Inventory.css";
+import IconInventory from "./SvgComponent.jsx";
 
 const Inventory = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -9,21 +22,34 @@ const Inventory = () => {
       header={{ height: 60 }}
       navbar={{
         width: 300,
-        breakpoint: "sm",
+        breakpoint: "md",
         collapsed: { mobile: !opened },
       }}
       padding="md"
     >
-      <AppShell.Header>
-        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-        <div>Logo</div>
+      <AppShell.Header className="container">
+        <Burger opened={opened} onClick={toggle} hiddenFrom="md" size="md" />
+        <ThemeIcon variant="gradient" m="md">
+          <IconInventory />
+        </ThemeIcon>
+        <Title order={2} visibleFrom="s">
+          Hello, User
+        </Title>
+        <Button disabled variant="light" type="button" className="clear-btn">
+          Clear
+        </Button>
+        <Button disabled type="button" className="save-btn" variant="gradient">
+          Save
+        </Button>
       </AppShell.Header>
 
-      <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+      <AppShell.Navbar style={{ backgroundColor: "#191919" }} p="md">
+        Navbar
+      </AppShell.Navbar>
 
-      <AppShell.Main>Main</AppShell.Main>
+      <AppShell.Main style={{ backgroundColor: "#131314" }}>Main</AppShell.Main>
       <AppShell.Footer>
-        <Pagination withEdges total={10} color="red.9" />
+        <Pagination className="pagination" withEdges total={10} color="red.9" />
       </AppShell.Footer>
     </AppShell>
   );
