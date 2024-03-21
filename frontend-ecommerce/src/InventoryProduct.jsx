@@ -41,7 +41,7 @@ function InventoryProduct() {
         <List style={{ marginInline: "5px" }}>
           <List.Item>Vram: 4</List.Item>
           <List.Item>Brand: Nvidia</List.Item>
-          <List.Item>Manufacterer: Nvidida</List.Item>
+          <List.Item>Manufacturer: Nvidida</List.Item>
         </List>
       </Box>
       <Box className="clear-btn">

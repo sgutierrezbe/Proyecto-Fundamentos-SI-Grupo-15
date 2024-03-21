@@ -15,6 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import "./Inventory.css";
 import IconInventory from "./SvgComponent.jsx";
 import InventoryProduct from "./InventoryProduct.jsx";
+import InventoryFilters from "./InventoryFilters.jsx";
 
 const Inventory = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -46,7 +47,7 @@ const Inventory = () => {
       </AppShell.Header>
 
       <AppShell.Navbar style={{ backgroundColor: "#191919" }} p="md">
-        Filtros
+        <InventoryFilters />
       </AppShell.Navbar>
 
       <AppShell.Main style={{ backgroundColor: "#131314" }}>
