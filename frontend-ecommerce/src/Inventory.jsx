@@ -9,10 +9,12 @@ import {
   Title,
   Space,
   Box,
+  SimpleGrid,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "./Inventory.css";
 import IconInventory from "./SvgComponent.jsx";
+import InventoryProduct from "./InventoryProduct.jsx";
 
 const Inventory = () => {
   const [opened, { toggle }] = useDisclosure();
@@ -44,12 +46,25 @@ const Inventory = () => {
       </AppShell.Header>
 
       <AppShell.Navbar style={{ backgroundColor: "#191919" }} p="md">
-        Navbar
+        Filtros
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ backgroundColor: "#131314" }}>Main</AppShell.Main>
+      <AppShell.Main style={{ backgroundColor: "#131314" }}>
+        <SimpleGrid cols={1}>
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+          <InventoryProduct />
+        </SimpleGrid>
+      </AppShell.Main>
+
       <AppShell.Footer>
-        <Pagination className="pagination" withEdges total={10} color="red.9" />
+        <Pagination className="pagination" withEdges total={20} color="red.9" />
       </AppShell.Footer>
     </AppShell>
   );

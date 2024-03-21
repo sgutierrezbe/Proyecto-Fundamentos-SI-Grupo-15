@@ -1,6 +1,13 @@
 .pagination {
-  width: 62em;
-  margin-inline-start: 30vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .pagination {
+    margin-inline-start: 300px;
+  }
 }
 
 .container {
@@ -16,4 +23,9 @@
 
 .save-btn {
   margin-right: 10px;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
 }
