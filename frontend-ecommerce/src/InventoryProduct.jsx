@@ -29,17 +29,14 @@ function InventoryProduct({ isSmallScreen }) {
         radius="md"
         h={isSmallScreen ? "8rem" : "100%"}
         w={isSmallScreen ? "100%" : "8rem"}
-        fit="scale-down"
+        fit="contain"
         style={{
           backgroundColor: "#ffffff",
           paddingInline: "5px",
           marginInlineEnd: "5px",
         }}
       />
-      <Divider
-        orientation={isSmallScreen ? "horizontal" : "vertical"}
-        size="sm"
-      />
+      {isSmallScreen ? <></> : <Divider orientation="vertical" size="sm" />}
       <Box
         style={
           isSmallScreen

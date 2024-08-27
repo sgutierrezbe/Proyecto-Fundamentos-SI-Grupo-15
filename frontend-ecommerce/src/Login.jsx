@@ -14,6 +14,7 @@ import {
 import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import "./Login.css";
 import backgroundImage from "./assets/loginBackground.jpg";
+import { redirect } from "react-router-dom";
 
 const Login = () => {
   const form = useForm({
@@ -50,7 +51,12 @@ const Login = () => {
             <Title>Welcome back</Title>
             <Divider label="Login" labelPosition="left" />
             <Space h="lg" />
-            <form onSubmit={form.onSubmit((values) => console.log(values))}>
+            <form
+              onSubmit={form.onSubmit((values) => {
+                console.log(values);
+                return redirect("/inventory");
+              })}
+            >
               <TextInput
                 withAsterisk
                 label="Email"
