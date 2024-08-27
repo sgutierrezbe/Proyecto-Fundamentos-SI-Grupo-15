@@ -14,9 +14,10 @@ import {
 import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import "./Login.css";
 import backgroundImage from "./assets/loginBackground.jpg";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigation = useNavigate();
   const form = useForm({
     initialValues: {
       email: "",
@@ -54,7 +55,7 @@ const Login = () => {
             <form
               onSubmit={form.onSubmit((values) => {
                 console.log(values);
-                return redirect("/inventory");
+                navigation("/inventory");
               })}
             >
               <TextInput
