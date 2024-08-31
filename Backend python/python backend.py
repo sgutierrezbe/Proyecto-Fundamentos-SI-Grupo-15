@@ -1,6 +1,6 @@
-#se importa la libreria pandas
-import pandas as pd
-#se crea la clase producto con los datos del cvs
+from flask import Flask, jsonify, request
+
+# Se crea la clase Producto
 class Product:
     def __init__(self, id, modelo, fabricante, marca, memoria, stock):
         self.id = int(id)
@@ -10,62 +10,65 @@ class Product:
         self.memoria = memoria
         self.stock = int(stock)
     
-    def __repr__(self):
-        return f"Product(id={self.id}, modelo='{self.modelo}', fabricante='{self.fabricante}', marca='{self.marca}', memoria='{self.memoria}', stock={self.stock})"
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'modelo': self.modelo,
+            'fabricante': self.fabricante,
+            'marca': self.marca,
+            'memoria': self.memoria,
+            'stock': self.stock
+        }
 
-#funcion que agarra el csv y lo convierte en una lista de instancias
-def read_products_from_csv(filename):
-    df = pd.read_csv(filename)
-    products = [Product(row['id'], row['modelo'], row['fabricante'], row['marca'], row['memoria'], row['stock']) for index, row in df.iterrows()]
-    return products
-# se crea la dtb
-filename = 'gpus.csv'
-products = read_products_from_csv(filename)
+# Lista de productos en memoria
+products = [
+    Product(1, "GTX 1060", "NVIDIA", "ASUS", "6GB", 10),
+    Product(2, "RTX 3080", "NVIDIA", "MSI", "10GB", 5),
+    Product(3, "RX 6800", "AMD", "Sapphire", "16GB", 8)
+]
 
-#funcion para imprimir las database ordenadas
-def print_database(products):
-    for product in products:
-        print(product)
+app = Flask(__name__)
 
-#funcion que permite organizar los productos por id, nombre, modelo, memoria, fabricante o stock
-def sort_products(products, key):
-    return sorted(products, key=lambda x: getattr(x, key))
 
-#funcioon que permite buscar segun cualquier termino de busqueda, nombre, modelo, memora etc
-def search_products(products, search_term):
-    search_term = search_term.lower()
-    return [
-        product for product in products
+
+# Ruta para obtener todos los productos en JSON
+@app.route('/products', methods=['GET'])
+def get_products():
+    return jsonify([product.to_dict() for product in products])
+
+# Ruta para buscar productos según un término de búsqueda
+@app.route('/products/search', methods=['GET'])
+def search():
+    search_term = request.args.get('term', '').lower()
+    search_result = [
+        product.to_dict() for product in products
         if search_term in product.modelo.lower() or
            search_term in product.fabricante.lower() or
            search_term in product.marca.lower() or
            search_term in product.memoria.lower() or
            search_term in str(product.stock).lower()
     ]
-# funcion para vender un producto reduciendo su stock, por un valor menor al stock actual
-def sell_product(products, product_id, quantity):
+    return jsonify(search_result)
+
+# Ruta para vender un producto, se espera un JSON con product_id y quantity
+@app.route('/products/sell', methods=['POST'])
+def sell_product():
+    data = request.get_json()
+    product_id = data.get('product_id')
+    quantity = data.get('quantity')
+
     for product in products:
         if product.id == product_id:
             if quantity <= product.stock:
                 product.stock -= quantity
-                print(f"se vendieron {quantity} unidades de {product.modelo}. stock actualizado: {product.stock}")
+                return jsonify({
+                    'message': f"Se vendieron {quantity} unidades de {product.modelo}. Stock actualizado: {product.stock}"
+                })
             else:
-                print(f"Error: no se puede vener {quantity} unidades. Solo quedan {product.stock} unidades en stock.")
-            return
-    print(f"Error: producto con ID {product_id} no existe.")
+                return jsonify({
+                    'error': f"No se puede vender {quantity} unidades. Solo quedan {product.stock} unidades en stock."
+                }), 400
+    return jsonify({'error': f'Producto con ID {product_id} no existe.'}), 404
 
-# Imprime todo el database
-print("Database:")
-print_database(products)
-
-#ejemplo de busqueda en el database por terminos
-search_term = '6GB'
-search_result = search_products(products, search_term)
-print(f"Resultados de busqueda para'{search_term}':")
-print_database(search_result)
-
-#ejemplo de venta
-product_id_to_sell = 18
-quantity_to_sell = 5
-
-sell_product(products, product_id_to_sell, quantity_to_sell)
+if __name__ == '__main__':
+    app.run(debug=True)
