@@ -2,8 +2,9 @@ show databases;
 use si_ecommerce;
 show tables;
 
+--test
 show columns from usuario;
-insert into usuario (idusuario,nombre,correo,password,rol) values
+insert into usuario values
 (1,"admin","admin@gmail.com","admin123","admin"),
 (2,"user","user@gmail.com","user123", "user");
 select * from usuario;
@@ -20,3 +21,19 @@ insert into gpu (modelo,marca,fabricante,vram,velocidad,raytracing,PRODUCTO_idpr
 ("Radeon RX 6600 XT", "AMD", "AMD", "12 GB GDDR6", "1325", "Sí",1);
 select * from gpu;
 
+--PRODUCTO
+
+LOAD DATA INFILE 'producto.txt'
+INTO TABLE producto
+FIELDS TERMINATED BY ' '
+LINES TERMINATED BY '\n'
+(idproducto, precio, stock);
+
+--GPU
+
+LOAD DATA INFILE 'gpus.csv'
+INTO TABLE gpu
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(PRODUCTO_idproducto, modelo, fabricante, marca, vram);
