@@ -24,18 +24,42 @@ class Product:
 products = [
     Product(1, "GTX 1060", "NVIDIA", "ASUS", "6GB", 10),
     Product(2, "RTX 3080", "NVIDIA", "MSI", "10GB", 5),
-    Product(3, "RX 6800", "AMD", "Sapphire", "16GB", 8)
+    Product(3, "RX 6800", "AMD", "Sapphire", "16GB", 8),
+    Product(4, "RTX 4090", "NVIDIA", "Gigabyte", "24GB", 3),
+    Product(5, "RX 7900 XTX", "AMD", "PowerColor", "24GB", 2)
 ]
 
 app = Flask(__name__)
 
-
-
-# Ruta para obtener todos los productos en JSON
+# Ruta para obtener productos con paginación y estructura de datos
 @app.route('/products', methods=['GET'])
 def get_products():
-    return jsonify([product.to_dict() for product in products])
+    # Parámetros de paginación
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
 
+    # Calcular índices de paginación
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    # Productos paginados
+    paginated_products = products[start:end]
+    
+    # Simulación de metadatos de paginación
+    total_products = len(products)
+    total_pages = (total_products + per_page - 1) // per_page
+
+    response = {
+        "data": [product.to_dict() for product in paginated_products],
+        "pagination": {
+            "total_items": total_products,
+            "total_pages": total_pages,
+            "current_page": page,
+            "items_per_page": per_page
+        }
+    }
+
+    return jsonify(response)
 # Ruta para buscar productos según un término de búsqueda
 @app.route('/products/search', methods=['GET'])
 def search():
