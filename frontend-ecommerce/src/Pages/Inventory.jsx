@@ -13,6 +13,22 @@ import IconInventory from "../Components/SvgComponent.jsx";
 import InventoryProduct from "../Components/InventoryProduct.jsx";
 import InventoryFilters from "../Components/InventoryFilters.jsx";
 import { useMediaQuery } from "@mantine/hooks";
+import { customFetch } from "../utils/index.js";
+import { useLoaderData } from "react-router-dom";
+
+const url = "/products";
+
+export const loader =
+  () =>
+  async ({ request }) => {
+    const params = Object.fromEntries([
+      ...new URL(request.url).searchParams.entries(),
+    ]);
+    const response = await customFetch(url, { params });
+    const products = response.data.data;
+    const pagination = response.data.pagination;
+    return { products, pagination, params };
+  };
 
 const Inventory = () => {
   const [opened, { toggle }] = useDisclosure();
