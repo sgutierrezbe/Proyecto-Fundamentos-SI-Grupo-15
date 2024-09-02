@@ -15,18 +15,22 @@ import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import "./Login.css";
 import backgroundImage from "../assets/loginBackground.jpg";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { customFetch } from "../utils";
+import { useState } from "react";
 
 const Login = () => {
   const navigation = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
   const form = useForm({
     initialValues: {
-      email: "",
+      identifier: "",
       password: "",
       termsOfService: false,
     },
 
     validate: {
-      email: isEmail("invalid email"),
+      identifier: isEmail("invalid identifier"),
       password: isNotEmpty("invalid password, it cannot be empty"),
       termsOfService: (value) => (value ? false : "Accept or else..."),
     },
@@ -53,22 +57,37 @@ const Login = () => {
             <Divider label="Login" labelPosition="left" />
             <Space h="lg" />
             <form
-              onSubmit={form.onSubmit((values) => {
-                console.log(values);
-                navigation("/inventory");
+              onSubmit={form.onSubmit(async (values) => {
+                setSubmitting(true);
+                const { identifier, password } = values;
+                try {
+                  const response = await customFetch.post("/auth/local", {
+                    identifier,
+                    password,
+                  });
+                  toast.success("Logged in successfully");
+                  return navigation("/inventory");
+                } catch (error) {
+                  console.log(error);
+                  setSubmitting(false);
+                  toast.error("something went wrong");
+                  return null;
+                }
               })}
             >
               <TextInput
                 withAsterisk
-                label="Email"
-                placeholder="your@email.com"
-                {...form.getInputProps("email")}
+                label="identifier"
+                name="identifier"
+                placeholder="your@identifier.com"
+                {...form.getInputProps("identifier")}
               />
 
               <Space h="sm" />
 
               <PasswordInput
                 label="Password"
+                name="password"
                 withAsterisk
                 placeholder="yourPassword1234"
                 {...form.getInputProps("password")}
@@ -82,8 +101,8 @@ const Login = () => {
               />
 
               <Group justify="flex-end" mt="md">
-                <Button type="submit" variant="gradient">
-                  Submit
+                <Button type="submit" variant="gradient" disabled={submitting}>
+                  {submitting ? "submitting..." : "submit"}
                 </Button>
               </Group>
             </form>
