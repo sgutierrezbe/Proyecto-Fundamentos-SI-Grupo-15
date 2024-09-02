@@ -10,6 +10,7 @@ import {
   Space,
   Box,
   SimpleGrid,
+  Flex,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "./Inventory.css";
@@ -53,12 +54,7 @@ const Inventory = () => {
       </AppShell.Navbar>
 
       <AppShell.Main style={{ backgroundColor: "#131314" }}>
-        <SimpleGrid
-          cols={1}
-          style={
-            isSmallScreen ? { marginBottom: "2rem" } : { marginBottom: "2rem" }
-          }
-        >
+        <Flex direction={"column"} style={{ marginBottom: "2rem" }} gap={"sm"}>
           <InventoryProduct isSmallScreen={isSmallScreen} />
           <InventoryProduct isSmallScreen={isSmallScreen} />
           <InventoryProduct isSmallScreen={isSmallScreen} />
@@ -66,7 +62,7 @@ const Inventory = () => {
           <InventoryProduct isSmallScreen={isSmallScreen} />
           <InventoryProduct isSmallScreen={isSmallScreen} />
           <InventoryProduct isSmallScreen={isSmallScreen} />
-        </SimpleGrid>
+        </Flex>
       </AppShell.Main>
 
       <AppShell.Footer>

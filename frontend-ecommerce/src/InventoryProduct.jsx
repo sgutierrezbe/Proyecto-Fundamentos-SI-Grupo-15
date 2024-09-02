@@ -47,8 +47,8 @@ function InventoryProduct({ isSmallScreen }) {
               }
             : {
                 height: "100%",
-                paddingTop: "1rem",
-                paddingBottom: "1rem",
+                paddingTop: "0.7rem",
+                paddingBottom: "0.7rem",
                 overflow: "hidden",
               }
         }
@@ -83,9 +83,9 @@ function InventoryProduct({ isSmallScreen }) {
       >
         <NumberInput
           value={1}
-          clampBehavior="strict"
           allowDecimal={false}
           allowNegative={false}
+          onChange={(e) => console.log(e)}
         />
       </Box>
     </Paper>

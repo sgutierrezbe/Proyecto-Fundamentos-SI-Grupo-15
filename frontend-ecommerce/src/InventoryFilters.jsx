@@ -5,21 +5,32 @@ import {
   Divider,
   Title,
   Button,
+  Flex,
 } from "@mantine/core";
 
 function InventoryFilters() {
   return (
-    <div>
+    <Flex direction={"column"} style={{ height: "100dvh" }}>
       <Title order={2}>Filters</Title>
       <Divider mb="sm" />
       <TextInput label="Search" mb="sm" />
       <Autocomplete label="Manufacturer" mb="sm" />
       <Autocomplete label="Brand" mb="sm" />
-      <NumberInput label="Vram" mb="sm" />
-      <Button variant="gradient" fullWidth className="search-btn">
+      <NumberInput
+        label="Vram"
+        mb="sm"
+        allowDecimal={false}
+        allowNegative={false}
+      />
+      <Button
+        variant="gradient"
+        fullWidth
+        style={{ marginTop: "auto" }}
+        type="submit"
+      >
         Search
       </Button>
-    </div>
+    </Flex>
   );
 }
 
