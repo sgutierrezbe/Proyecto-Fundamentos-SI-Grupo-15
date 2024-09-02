@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useForm, isEmail, isNotEmpty } from "@mantine/form";
 import "./Login.css";
-import backgroundImage from "./assets/loginBackground.jpg";
+import backgroundImage from "../assets/loginBackground.jpg";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {

@@ -7,7 +7,7 @@ import {
   List,
   NumberInput,
 } from "@mantine/core";
-import placeholderImage from "./assets/graphic-card.png";
+import placeholderImage from "../assets/graphic-card.png";
 
 function InventoryProduct({ isSmallScreen }) {
   return (

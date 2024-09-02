@@ -9,9 +9,9 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "./Inventory.css";
-import IconInventory from "./SvgComponent.jsx";
-import InventoryProduct from "./InventoryProduct.jsx";
-import InventoryFilters from "./InventoryFilters.jsx";
+import IconInventory from "../Components/SvgComponent.jsx";
+import InventoryProduct from "../Components/InventoryProduct.jsx";
+import InventoryFilters from "../Components/InventoryFilters.jsx";
 import { useMediaQuery } from "@mantine/hooks";
 
 const Inventory = () => {
