@@ -4,12 +4,7 @@ import {
   Pagination,
   ThemeIcon,
   Button,
-  Image,
-  Text,
   Title,
-  Space,
-  Box,
-  SimpleGrid,
   Flex,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
