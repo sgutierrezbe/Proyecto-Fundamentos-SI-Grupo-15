@@ -86,6 +86,10 @@ def search():
         'stock': request.args.get('stock', '').lower()
     }
     
+    # Parámetros de paginación
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+
     def memory_compare(product_memory, search_memory):
         if not search_memory:
             return True
@@ -102,7 +106,27 @@ def search():
             if search_term  # Solo considera los parámetros no vacíos
         )
     ]
-    return jsonify(search_result)
+
+    # Calcular índices de paginación
+    total_products = len(search_result)
+    total_pages = (total_products + per_page - 1) // per_page
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    # Productos paginados
+    paginated_search_result = search_result[start:end]
+
+    response = {
+        "data": paginated_search_result,
+        "pagination": {
+            "total_items": total_products,
+            "total_pages": total_pages,
+            "current_page": page,
+            "items_per_page": per_page
+        }
+    }
+
+    return jsonify(response)
 
 # Ruta para cambiar el stock de productos, se espera un JSON con un array de objetos con id y stock
 @app.route('/changeStock', methods=['POST'])
