@@ -104,25 +104,37 @@ def search():
     ]
     return jsonify(search_result)
 
-# Ruta para vender un producto, se espera un JSON con product_id y quantity
-@app.route('/products/sell', methods=['POST'])
-def sell_product():
+# Ruta para cambiar el stock de productos, se espera un JSON con un array de objetos con id y stock
+@app.route('/changeStock', methods=['POST'])
+def change_stock():
     data = request.get_json()
-    product_id = data.get('product_id')
-    quantity = data.get('quantity')
+    
+    if not isinstance(data, list):
+        return jsonify({'error': 'Se espera un array de objetos'}), 400
 
-    for product in products:
-        if product.id == product_id:
-            if quantity <= product.stock:
-                product.stock -= quantity
-                return jsonify({
-                    'message': f"Se vendieron {quantity} unidades de {product.modelo}. Stock actualizado: {product.stock}"
-                })
-            else:
-                return jsonify({
-                    'error': f"No se puede vender {quantity} unidades. Solo quedan {product.stock} unidades en stock."
-                }), 400
-    return jsonify({'error': f'Producto con ID {product_id} no existe.'}), 404
+    results = []
+    for item in data:
+        product_id = item.get('id')
+        new_stock = item.get('stock')
+
+        if product_id is None or new_stock is None:
+            results.append({'error': f'Objeto inválido: {item}'})
+            continue
+
+        product = next((p for p in products if p.id == product_id), None)
+        if product:
+            old_stock = product.stock
+            product.stock = new_stock
+            results.append({
+                'id': product_id,
+                'modelo': product.modelo,
+                'old_stock': old_stock,
+                'new_stock': new_stock
+            })
+        else:
+            results.append({'error': f'Producto con ID {product_id} no existe.'})
+
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(debug=True)
