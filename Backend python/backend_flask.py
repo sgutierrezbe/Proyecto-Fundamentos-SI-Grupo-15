@@ -1,3 +1,4 @@
+import csv
 from flask import Flask, jsonify, request
 
 # Se crea la clase Producto
@@ -20,14 +21,28 @@ class Product:
             'stock': self.stock
         }
 
-# Lista de productos en memoria
-products = [
-    Product(1, "GTX 1060", "NVIDIA", "ASUS", "6GB", 10),
-    Product(2, "RTX 3080", "NVIDIA", "MSI", "10GB", 5),
-    Product(3, "RX 6800", "AMD", "Sapphire", "16GB", 8),
-    Product(4, "RTX 4090", "NVIDIA", "Gigabyte", "24GB", 3),
-    Product(5, "RX 7900 XTX", "AMD", "PowerColor", "24GB", 2)
-]
+# Función para cargar productos desde un archivo CSV
+def load_products_from_csv(file_path):
+    products = []
+    with open(file_path, mode='r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            product = Product(
+                id=row['id'],
+                modelo=row['modelo'],
+                fabricante=row['fabricante'],
+                marca=row['marca'],
+                memoria=row['memoria'],
+                stock=row['stock']
+            )
+            products.append(product)
+    return products
+
+# Ruta al archivo CSV
+csv_file_path = r'D:\extra\gpus.csv' #caambia esto
+
+# Cargar los productos desde el CSV
+products = load_products_from_csv(csv_file_path)
 
 app = Flask(__name__)
 
@@ -60,17 +75,32 @@ def get_products():
     }
 
     return jsonify(response)
-# Ruta para buscar productos según un término de búsqueda
+
 @app.route('/products/search', methods=['GET'])
 def search():
-    search_term = request.args.get('term', '').lower()
+    search_params = {
+        'modelo': request.args.get('modelo', '').lower(),
+        'fabricante': request.args.get('fabricante', '').lower(),
+        'marca': request.args.get('marca', '').lower(),
+        'memoria': request.args.get('memoria', '').lower(),
+        'stock': request.args.get('stock', '').lower()
+    }
+    
+    def memory_compare(product_memory, search_memory):
+        if not search_memory:
+            return True
+        product_value = int(''.join(filter(str.isdigit, product_memory)))
+        search_value = int(''.join(filter(str.isdigit, search_memory)))
+        return product_value <= search_value
+
     search_result = [
         product.to_dict() for product in products
-        if search_term in product.modelo.lower() or
-           search_term in product.fabricante.lower() or
-           search_term in product.marca.lower() or
-           search_term in product.memoria.lower() or
-           search_term in str(product.stock).lower()
+        if all(
+            (attr != 'memoria' and search_term in str(getattr(product, attr)).lower()) or
+            (attr == 'memoria' and memory_compare(getattr(product, attr), search_term))
+            for attr, search_term in search_params.items()
+            if search_term  # Solo considera los parámetros no vacíos
+        )
     ]
     return jsonify(search_result)
 
