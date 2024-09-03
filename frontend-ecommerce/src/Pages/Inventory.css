@@ -16,15 +16,6 @@
   align-items: center;
 }
 
-.clear-btn {
-  margin-left: auto;
-  margin-right: 10px;
-}
-
-.save-btn {
-  margin-right: 10px;
-}
-
 .card-container {
   display: flex;
   flex-direction: row;

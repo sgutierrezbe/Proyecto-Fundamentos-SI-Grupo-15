@@ -6,7 +6,7 @@ import {
   Button,
   Title,
   Flex,
-  Loader,
+  Modal,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "./Inventory.css";
@@ -19,6 +19,7 @@ import { useLoaderData, useNavigation } from "react-router-dom";
 import LoadingScreen from "../Components/LoadingScreen.jsx";
 import { gpus } from "../mock/index.js";
 import { useChangedItems } from "../stores/index.js";
+import InventoryProductModal from "../Components/InventoryProductModal.jsx";
 
 const url = "/products";
 
@@ -35,7 +36,8 @@ export const loader =
   };
 
 const Inventory = () => {
-  const [opened, { toggle }] = useDisclosure();
+  const [openedBurger, { toggle }] = useDisclosure();
+  const [opened, { open, close }] = useDisclosure(false);
   const isSmallScreen = useMediaQuery("(max-width: 650px)");
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
@@ -49,7 +51,7 @@ const Inventory = () => {
       navbar={{
         width: 300,
         breakpoint: "md",
-        collapsed: { mobile: !opened },
+        collapsed: { mobile: !openedBurger },
       }}
       padding="md"
     >
@@ -61,11 +63,45 @@ const Inventory = () => {
         <Title order={2} visibleFrom="s">
           Hello, User
         </Title>
+        <div style={{ marginLeft: "auto", marginRight: "10px" }}>
+          <Modal
+            opened={opened}
+            onClose={close}
+            title={`Changed Items: ${changedItems.length}`}
+            centered
+            overlayProps={{
+              backgroundOpacity: 0.55,
+              blur: 3,
+            }}
+          >
+            {
+              <Flex direction={"column"} gap={"sm"}>
+                {changedItems.map((gpu) => {
+                  return (
+                    <InventoryProductModal
+                      key={gpu.id}
+                      {...gpu}
+                      isSmallScreen={isSmallScreen}
+                    />
+                  );
+                })}
+              </Flex>
+            }
+          </Modal>
+
+          <Button
+            disabled={changedItems.length === 0}
+            variant="subtle"
+            onClick={open}
+          >
+            See changes
+          </Button>
+        </div>
         <Button
           disabled={changedItems.length === 0}
           variant="light"
           type="button"
-          className="clear-btn"
+          style={{ marginRight: "10px" }}
           onClick={() => {
             clearItems();
             location.reload();
@@ -76,7 +112,7 @@ const Inventory = () => {
         <Button
           disabled={changedItems.length === 0}
           type="button"
-          className="save-btn"
+          style={{ marginRight: "10px" }}
           variant="gradient"
         >
           Save
