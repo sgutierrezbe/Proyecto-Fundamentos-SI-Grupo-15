@@ -24,27 +24,27 @@ const marks = [
 function InventoryFilters() {
   const navigation = useNavigate();
   const { params } = useLoaderData();
-  const { manufacturer, brand, search, vram } = params;
+  const { fabricante, marca, modelo, memoria } = params;
   return (
     <form
       style={{ display: "flex", flexDirection: "column", height: "100dvh" }}
     >
       <Title order={2}>Filters</Title>
       <Divider mb="sm" />
-      <TextInput name="search" label="Search" mb="sm" defaultValue={search} />
+      <TextInput name="modelo" label="Search" mb="sm" defaultValue={modelo} />
       <Autocomplete
-        name="manufacturer"
+        name="fabricante"
         label="Manufacturer"
         mb="sm"
-        defaultValue={manufacturer}
+        defaultValue={fabricante}
       />
-      <Autocomplete name="brand" label="Brand" mb="sm" defaultValue={brand} />
+      <Autocomplete name="marca" label="Brand" mb="sm" defaultValue={marca} />
       <Text size="md" mb="xs">
         Max vram
       </Text>
       <Slider
-        name="vram"
-        defaultValue={vram}
+        name="memoria"
+        defaultValue={memoria}
         min={2}
         max={26}
         step={2}

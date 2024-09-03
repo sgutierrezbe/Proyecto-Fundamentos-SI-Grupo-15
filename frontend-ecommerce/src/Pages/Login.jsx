@@ -16,7 +16,7 @@ import "./Login.css";
 import backgroundImage from "../assets/loginBackground.jpg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { customFetch } from "../utils";
+import { loginFetch } from "../utils";
 import { useState } from "react";
 
 const Login = () => {
@@ -61,7 +61,7 @@ const Login = () => {
                 setSubmitting(true);
                 const { identifier, password } = values;
                 try {
-                  const response = await customFetch.post("/auth/local", {
+                  const response = await loginFetch.post("/auth/local", {
                     identifier,
                     password,
                   });
