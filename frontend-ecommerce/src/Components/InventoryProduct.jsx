@@ -8,8 +8,29 @@ import {
   NumberInput,
 } from "@mantine/core";
 import placeholderImage from "../assets/graphic-card.png";
+import { useEffect, useState } from "react";
+import { useChangedItems } from "../stores";
 
-function InventoryProduct({ isSmallScreen }) {
+function InventoryProduct({
+  isSmallScreen,
+  id,
+  modelo,
+  fabricante,
+  marca,
+  memoria,
+  stock,
+}) {
+  const { changeItem, findItem, deleteItem } = useChangedItems();
+  const [itemStock, setItemStock] = useState(findItem(id)?.stock ?? stock);
+
+  useEffect(() => {
+    if (itemStock !== stock) {
+      changeItem({ id, modelo, fabricante, marca, memoria, stock: itemStock });
+    } else {
+      console.log(deleteItem(id));
+    }
+  }, [itemStock]);
+
   return (
     <Paper
       style={
@@ -59,7 +80,7 @@ function InventoryProduct({ isSmallScreen }) {
             isSmallScreen ? { height: "fit-content" } : { marginLeft: "5px" }
           }
         >
-          GeForce GTX 1050 Mobile 3GB
+          {modelo}
         </Title>
         <Divider />
         <List
@@ -69,9 +90,9 @@ function InventoryProduct({ isSmallScreen }) {
               : { marginLeft: "5px" }
           }
         >
-          <List.Item>Vram: 4</List.Item>
-          <List.Item>Brand: Nvidia</List.Item>
-          <List.Item>Manufacturer: Nvidida</List.Item>
+          <List.Item>Vram: {memoria}</List.Item>
+          <List.Item>Brand: {marca}</List.Item>
+          <List.Item>Manufacturer: {fabricante}</List.Item>
         </List>
       </Box>
       <Box
@@ -82,10 +103,12 @@ function InventoryProduct({ isSmallScreen }) {
         }
       >
         <NumberInput
-          value={1}
+          value={itemStock}
           allowDecimal={false}
           allowNegative={false}
-          onChange={(e) => console.log(e)}
+          onChange={(e) => {
+            setItemStock(e);
+          }}
         />
       </Box>
     </Paper>

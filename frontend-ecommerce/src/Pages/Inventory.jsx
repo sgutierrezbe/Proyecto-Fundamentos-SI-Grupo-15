@@ -6,6 +6,7 @@ import {
   Button,
   Title,
   Flex,
+  Loader,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import "./Inventory.css";
@@ -14,7 +15,10 @@ import InventoryProduct from "../Components/InventoryProduct.jsx";
 import InventoryFilters from "../Components/InventoryFilters.jsx";
 import { useMediaQuery } from "@mantine/hooks";
 import { customFetch } from "../utils/index.js";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigation } from "react-router-dom";
+import LoadingScreen from "../Components/LoadingScreen.jsx";
+import { gpus } from "../mock/index.js";
+import { useChangedItems } from "../stores/index.js";
 
 const url = "/products";
 
@@ -33,8 +37,13 @@ export const loader =
 const Inventory = () => {
   const [opened, { toggle }] = useDisclosure();
   const isSmallScreen = useMediaQuery("(max-width: 650px)");
+  const navigation = useNavigation();
+  const isLoading = navigation.state === "loading";
+  const { changedItems, clearItems } = useChangedItems();
 
-  return (
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <AppShell
       header={{ height: 60 }}
       navbar={{
@@ -52,10 +61,24 @@ const Inventory = () => {
         <Title order={2} visibleFrom="s">
           Hello, User
         </Title>
-        <Button disabled variant="light" type="button" className="clear-btn">
+        <Button
+          disabled={changedItems.length === 0}
+          variant="light"
+          type="button"
+          className="clear-btn"
+          onClick={() => {
+            clearItems();
+            location.reload();
+          }}
+        >
           Clear
         </Button>
-        <Button disabled type="button" className="save-btn" variant="gradient">
+        <Button
+          disabled={changedItems.length === 0}
+          type="button"
+          className="save-btn"
+          variant="gradient"
+        >
           Save
         </Button>
       </AppShell.Header>
@@ -66,13 +89,15 @@ const Inventory = () => {
 
       <AppShell.Main style={{ backgroundColor: "#131314" }}>
         <Flex direction={"column"} style={{ marginBottom: "2rem" }} gap={"sm"}>
-          <InventoryProduct isSmallScreen={isSmallScreen} />
-          <InventoryProduct isSmallScreen={isSmallScreen} />
-          <InventoryProduct isSmallScreen={isSmallScreen} />
-          <InventoryProduct isSmallScreen={isSmallScreen} />
-          <InventoryProduct isSmallScreen={isSmallScreen} />
-          <InventoryProduct isSmallScreen={isSmallScreen} />
-          <InventoryProduct isSmallScreen={isSmallScreen} />
+          {gpus.map((gpu) => {
+            return (
+              <InventoryProduct
+                key={gpu.id}
+                {...gpu}
+                isSmallScreen={isSmallScreen}
+              />
+            );
+          })}
         </Flex>
       </AppShell.Main>
 
