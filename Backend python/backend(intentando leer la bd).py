@@ -39,7 +39,7 @@ def load_products_from_csv(file_path):
     return products
 
 # Ruta al archivo CSV
-csv_file_path = r'D:\Escritorio\backend\gpus\gpus.csv' #caambia esto
+csv_file_path = r'D:\extra\gpus.csv' #caambia esto
 
 # Cargar los productos desde el CSV
 products = load_products_from_csv(csv_file_path)
@@ -76,17 +76,32 @@ def get_products():
 
     return jsonify(response)
 
-# Ruta para buscar productos según un término de búsqueda
+# Ruta para buscar productos según múltiples parámetros específicos
 @app.route('/products/search', methods=['GET'])
 def search():
-    search_term = request.args.get('term', '').lower()
+    search_params = {
+        'modelo': request.args.get('modelo', '').lower(),
+        'fabricante': request.args.get('fabricante', '').lower(),
+        'marca': request.args.get('marca', '').lower(),
+        'memoria': request.args.get('memoria', '').lower(),
+        'stock': request.args.get('stock', '').lower()
+    }
+    
+    def memory_compare(product_memory, search_memory):
+        if not search_memory:
+            return True
+        product_value = int(''.join(filter(str.isdigit, product_memory)))
+        search_value = int(''.join(filter(str.isdigit, search_memory)))
+        return product_value <= search_value
+
     search_result = [
         product.to_dict() for product in products
-        if search_term in product.modelo.lower() or
-           search_term in product.fabricante.lower() or
-           search_term in product.marca.lower() or
-           search_term in product.memoria.lower() or
-           search_term in str(product.stock).lower()
+        if all(
+            (attr != 'memoria' and search_term in str(getattr(product, attr)).lower()) or
+            (attr == 'memoria' and memory_compare(getattr(product, attr), search_term))
+            for attr, search_term in search_params.items()
+            if search_term  # Solo considera los parámetros no vacíos
+        )
     ]
     return jsonify(search_result)
 
