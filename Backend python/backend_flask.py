@@ -39,44 +39,14 @@ def load_products_from_csv(file_path):
     return products
 
 # Ruta al archivo CSV
-csv_file_path = r'D:\extra\gpus.csv' #caambia esto
+csv_file_path = r'C:\Unal tareas\FDSI\Proyecto-Fundamentos-SI-Grupo-15\Backend python\gpus.csv' #caambia esto
 
 # Cargar los productos desde el CSV
 products = load_products_from_csv(csv_file_path)
 
 app = Flask(__name__)
 
-# Ruta para obtener productos con paginación y estructura de datos
 @app.route('/products', methods=['GET'])
-def get_products():
-    # Parámetros de paginación
-    page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 10))
-
-    # Calcular índices de paginación
-    start = (page - 1) * per_page
-    end = start + per_page
-
-    # Productos paginados
-    paginated_products = products[start:end]
-    
-    # Simulación de metadatos de paginación
-    total_products = len(products)
-    total_pages = (total_products + per_page - 1) // per_page
-
-    response = {
-        "data": [product.to_dict() for product in paginated_products],
-        "pagination": {
-            "total_items": total_products,
-            "total_pages": total_pages,
-            "current_page": page,
-            "items_per_page": per_page
-        }
-    }
-
-    return jsonify(response)
-
-@app.route('/products/search', methods=['GET'])
 def search():
     search_params = {
         'modelo': request.args.get('modelo', '').lower(),
