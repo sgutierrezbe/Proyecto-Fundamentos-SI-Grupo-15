@@ -1,6 +1,6 @@
 import csv
 from flask import Flask, jsonify, request
-
+from flask_cors import CORS
 # Se crea la clase Producto
 class Product:
     def __init__(self, id, modelo, fabricante, marca, memoria, stock):
@@ -45,6 +45,7 @@ csv_file_path = r'C:\Unal tareas\FDSI\Proyecto-Fundamentos-SI-Grupo-15\Backend p
 products = load_products_from_csv(csv_file_path)
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/products', methods=['GET'])
 def search():
