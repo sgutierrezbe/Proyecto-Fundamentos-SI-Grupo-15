@@ -147,6 +147,7 @@ const Inventory = () => {
                 "/changeStock",
                 changedItems
               );
+              clearItems();
               toast.success("items updated successfully");
               setIsSubmitting(false);
               return handleReload();
