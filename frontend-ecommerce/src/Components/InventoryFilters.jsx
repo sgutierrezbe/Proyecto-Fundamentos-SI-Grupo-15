@@ -1,15 +1,13 @@
 import {
   TextInput,
   Autocomplete,
-  NumberInput,
   Divider,
   Title,
   Button,
-  Flex,
   Slider,
   Text,
 } from "@mantine/core";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 
 const marks = [
   { value: 2, label: "2" },
@@ -23,11 +21,18 @@ const marks = [
 
 function InventoryFilters() {
   const navigation = useNavigate();
+  const { pathname } = useLocation();
   const { params } = useLoaderData();
   const { fabricante, marca, modelo, memoria } = params;
   return (
     <form
       style={{ display: "flex", flexDirection: "column", height: "100dvh" }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        navigation(
+          `${pathname}?modelo=${e.target[0].value}&fabricante=${e.target[1].value}&marca=${e.target[2].value}&memoria=${e.target[3].value}`
+        );
+      }}
     >
       <Title order={2}>Filters</Title>
       <Divider mb="sm" />
