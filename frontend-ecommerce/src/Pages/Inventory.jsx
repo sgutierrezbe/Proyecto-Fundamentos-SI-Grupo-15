@@ -22,9 +22,10 @@ import {
   useNavigation,
 } from "react-router-dom";
 import LoadingScreen from "../Components/LoadingScreen.jsx";
-import { gpus } from "../mock/index.js";
 import { useChangedItems } from "../stores/index.js";
 import InventoryProductModal from "../Components/InventoryProductModal.jsx";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const url = "products";
 
@@ -43,17 +44,28 @@ export const loader =
 const Inventory = () => {
   const [openedBurger, { toggle }] = useDisclosure();
   const [opened, { open, close }] = useDisclosure(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 650px)");
   const navigation = useNavigation();
   const navigate = useNavigate();
   const isLoading = navigation.state === "loading";
-  const { changedItems, clearItems } = useChangedItems();
+  const { changedItems, clearItems, getItemsFromLocalStorage } =
+    useChangedItems();
   const { products, pagination } = useLoaderData();
   const { search, pathname } = useLocation();
+
+  useEffect(() => {
+    getItemsFromLocalStorage();
+  }, []);
 
   const handlePageChange = (pageNumber) => {
     const searchParams = new URLSearchParams(search);
     searchParams.set("page", pageNumber);
+    navigate(`${pathname}?${searchParams}`);
+  };
+
+  const handleReload = () => {
+    const searchParams = new URLSearchParams(search);
     navigate(`${pathname}?${searchParams}`);
   };
 
@@ -104,7 +116,7 @@ const Inventory = () => {
           </Modal>
 
           <Button
-            disabled={changedItems.length === 0}
+            disabled={changedItems.length === 0 || isSubmitting}
             variant="subtle"
             onClick={open}
           >
@@ -112,24 +124,41 @@ const Inventory = () => {
           </Button>
         </div>
         <Button
-          disabled={changedItems.length === 0}
+          disabled={changedItems.length === 0 || isSubmitting}
           variant="light"
           type="button"
           style={{ marginRight: "10px" }}
           onClick={() => {
             clearItems();
-            location.reload();
+            handleReload();
           }}
         >
           Clear
         </Button>
         <Button
-          disabled={changedItems.length === 0}
+          disabled={changedItems.length === 0 || isSubmitting}
           type="button"
           style={{ marginRight: "10px" }}
           variant="gradient"
+          onClick={async () => {
+            setIsSubmitting(true);
+            try {
+              const response = await productsFetch.post(
+                "/changeStock",
+                changedItems
+              );
+              toast.success("items updated successfully");
+              setIsSubmitting(false);
+              return handleReload();
+            } catch (error) {
+              console.log(error);
+              toast.error("something went wrong");
+              setIsSubmitting(false);
+              return null;
+            }
+          }}
         >
-          Save
+          {isSubmitting ? "saving..." : "save"}
         </Button>
       </AppShell.Header>
 
@@ -139,15 +168,21 @@ const Inventory = () => {
 
       <AppShell.Main style={{ backgroundColor: "#131314" }}>
         <Flex direction={"column"} style={{ marginBottom: "2rem" }} gap={"sm"}>
-          {products.map((gpu) => {
-            return (
-              <InventoryProduct
-                key={gpu.id}
-                {...gpu}
-                isSmallScreen={isSmallScreen}
-              />
-            );
-          })}
+          {products.length !== 0 ? (
+            products.map((gpu) => {
+              return (
+                <InventoryProduct
+                  key={gpu.id}
+                  {...gpu}
+                  isSmallScreen={isSmallScreen}
+                />
+              );
+            })
+          ) : (
+            <h1>
+              Items do not exist with your filters :C... try changing them!
+            </h1>
+          )}
         </Flex>
       </AppShell.Main>
 

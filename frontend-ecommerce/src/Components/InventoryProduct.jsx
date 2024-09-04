@@ -27,7 +27,7 @@ function InventoryProduct({
     if (itemStock !== stock) {
       changeItem({ id, modelo, fabricante, marca, memoria, stock: itemStock });
     } else {
-      console.log(deleteItem(id));
+      deleteItem(id);
     }
   }, [itemStock]);
 
