@@ -68,9 +68,9 @@ const Login = () => {
                   toast.success("Logged in successfully");
                   return navigation("/inventory");
                 } catch (error) {
-                  console.log(error);
+                  const errorMessage = error?.response?.data?.error?.message;
                   setSubmitting(false);
-                  toast.error("something went wrong");
+                  toast.error(errorMessage);
                   return null;
                 }
               })}
