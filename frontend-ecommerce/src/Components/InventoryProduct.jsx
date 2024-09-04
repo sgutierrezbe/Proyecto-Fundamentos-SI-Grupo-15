@@ -40,8 +40,24 @@ function InventoryProduct({
               flexDirection: "column",
               overflow: "hidden",
               maxHeight: "400px",
+              boxSizing: "border-box",
+              border:
+                itemStock !== stock
+                  ? "1px solid rgba(189, 0, 0, 1)"
+                  : "1px solid #242424",
+              borderRadius: "10px",
             }
-          : { display: "flex", alignItems: "center", height: "100%" }
+          : {
+              display: "flex",
+              alignItems: "center",
+              height: "100%",
+              boxSizing: "border-box",
+              border:
+                itemStock !== stock
+                  ? "1px solid rgba(189, 0, 0, 1)"
+                  : "1px solid #242424",
+              borderRadius: "10px",
+            }
       }
     >
       <Image

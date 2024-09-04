@@ -1,15 +1,5 @@
-import {
-  Paper,
-  Divider,
-  Image,
-  Box,
-  Title,
-  List,
-  NumberInput,
-} from "@mantine/core";
+import { Paper, Divider, Image, Box, Title, List } from "@mantine/core";
 import placeholderImage from "../assets/graphic-card.png";
-import { useEffect, useState } from "react";
-import { useChangedItems } from "../stores";
 
 const InventoryProductModal = ({
   isSmallScreen,
@@ -82,6 +72,7 @@ const InventoryProductModal = ({
           <List.Item>Vram: {memoria}</List.Item>
           <List.Item>Brand: {marca}</List.Item>
           <List.Item>Manufacturer: {fabricante}</List.Item>
+          <List.Item>changed stock: {stock}</List.Item>
         </List>
       </Box>
     </Paper>
