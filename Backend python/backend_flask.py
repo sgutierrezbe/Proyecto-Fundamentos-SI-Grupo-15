@@ -39,7 +39,8 @@ def load_products_from_csv(file_path):
     return products
 
 # Ruta al archivo CSV
-csv_file_path = r'C:\Unal tareas\FDSI\Proyecto-Fundamentos-SI-Grupo-15\Backend python\gpus.csv' #caambia esto
+import os
+csv_file_path = os.path.join(os.path.dirname(__file__), 'gpus.csv')
 
 # Cargar los productos desde el CSV
 products = load_products_from_csv(csv_file_path)
